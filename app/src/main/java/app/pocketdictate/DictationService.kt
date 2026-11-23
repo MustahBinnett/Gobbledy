@@ -335,7 +335,10 @@ class DictationService : Service(), MicButtonView.Listener {
             text = runCatching { SpellingConverter.get(this).convert(text) }.getOrDefault(text)
         }
         val inserted = DictateAccessibilityService.instance
-            ?.insertText(text, Prefs.alwaysPaste(this)) ?: false
+            ?.insertText(text, Prefs.alwaysPaste(this)) {
+                copyToClipboard(text)
+                toast(R.string.toast_copied)
+            } ?: false
         if (!inserted) {
             copyToClipboard(text)
             toast(

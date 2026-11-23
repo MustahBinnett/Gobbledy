@@ -65,13 +65,19 @@ class DictateAccessibilityService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
     override fun onInterrupt() {}
 
-    /** Returns true if the text went into a field. Must be called on the main thread. */
-    fun insertText(text: String, alwaysPaste: Boolean): Boolean {
+    private val main = android.os.Handler(android.os.Looper.getMainLooper())
+
+    /**
+     * Returns true if the text was handed to a field. Must be called on the main thread.
+     * [onLateFailure] runs if a SET_TEXT that the app accepted turns out, a moment
+     * later, not to have changed the field (the caller then copies to the clipboard).
+     */
+    fun insertText(text: String, alwaysPaste: Boolean, onLateFailure: () -> Unit): Boolean {
         val node = findFocusedEditable() ?: run {
             Log.i(TAG, "No focused editable field"); return false
         }
         return try {
-            (!alwaysPaste && trySetText(node, text)) || tryPaste(node, text)
+            (!alwaysPaste && trySetText(node, text, onLateFailure)) || tryPaste(node, text)
         } catch (e: Exception) {
             Log.w(TAG, "Insert failed", e); false
         }
@@ -97,7 +103,7 @@ class DictateAccessibilityService : AccessibilityService() {
         return node.text?.toString() ?: ""
     }
 
-    private fun trySetText(node: AccessibilityNodeInfo, text: String): Boolean {
+    private fun trySetText(node: AccessibilityNodeInfo, text: String, onLateFailure: () -> Unit): Boolean {
         if (!node.actionList.contains(AccessibilityAction.ACTION_SET_TEXT)) return false
         val current = currentText(node) ?: return false
         var start = node.textSelectionStart
@@ -127,12 +133,21 @@ class DictateAccessibilityService : AccessibilityService() {
                 putInt(AccessibilityNodeInfo.ACTION_ARGUMENT_SELECTION_END_INT, cursor)
             }
         )
-        // Some apps say "yes" but ignore SET_TEXT. Check the words actually landed.
-        node.refresh()
-        val after = node.text?.toString() ?: return true
-        val landed = after.contains(insertion.trim())
-        if (!landed) Log.i(TAG, "SET_TEXT reported success but text didn't change")
-        return landed
+        // Some apps (e.g. Compose/React-based ones like the Claude app) update the
+        // field a moment later, so an immediate check gives a false "failed" and a
+        // paste fallback would insert the words twice. Trust the "yes" now, and
+        // only check after a short delay; if the field truly never changed, hand
+        // back to the caller to copy the text instead (never paste a second copy).
+        main.postDelayed({
+            val after = try {
+                node.refresh(); node.text?.toString()
+            } catch (_: Exception) { null } ?: return@postDelayed
+            if (!after.contains(insertion.trim()) && after == current) {
+                Log.i(TAG, "SET_TEXT accepted but the field never changed")
+                onLateFailure()
+            }
+        }, 600)
+        return true
     }
 
     private fun tryPaste(node: AccessibilityNodeInfo, text: String): Boolean {
