@@ -106,6 +106,7 @@ class MainActivity : Activity() {
             override fun onStopTrackingTouch(s: SeekBar) {}
         })
 
+        bindSwitch(R.id.typingSwitch, Prefs.ONLY_WHILE_TYPING, Prefs.onlyWhileTyping(this))
         bindSwitch(R.id.bootSwitch, Prefs.LAUNCH_AT_BOOT, Prefs.launchAtBoot(this))
         bindSwitch(R.id.auSwitch, Prefs.AU_SPELLING, Prefs.auSpelling(this))
         bindSwitch(R.id.pasteSwitch, Prefs.ALWAYS_PASTE, Prefs.alwaysPaste(this))

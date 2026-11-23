@@ -12,6 +12,7 @@ object Prefs {
     const val LAUNCH_AT_BOOT = "launch_at_boot"
     const val ALWAYS_PASTE = "always_paste"
     const val AU_SPELLING = "au_spelling"
+    const val ONLY_WHILE_TYPING = "only_while_typing"
     const val POS_X = "button_x"
     const val POS_Y = "button_y"
 
@@ -28,6 +29,7 @@ object Prefs {
     fun launchAtBoot(c: Context) = of(c).getBoolean(LAUNCH_AT_BOOT, false)
     fun alwaysPaste(c: Context) = of(c).getBoolean(ALWAYS_PASTE, false)
     fun auSpelling(c: Context) = of(c).getBoolean(AU_SPELLING, true)
+    fun onlyWhileTyping(c: Context) = of(c).getBoolean(ONLY_WHILE_TYPING, true)
 
     fun set(c: Context, key: String, value: Boolean) = of(c).edit().putBoolean(key, value).apply()
     fun set(c: Context, key: String, value: Int) = of(c).edit().putInt(key, value).apply()

@@ -84,6 +84,10 @@
             <TextView style="@style/PD.Body" android:text="@string/show_button_help" />
 
             <View style="@style/PD.Divider" />
+            <Switch android:id="@+id/typingSwitch" style="@style/PD.Switch" android:text="@string/only_while_typing" />
+            <TextView style="@style/PD.Body" android:text="@string/only_while_typing_help" />
+
+            <View style="@style/PD.Divider" />
             <TextView android:id="@+id/sizeLabel" style="@style/PD.Status" />
             <SeekBar
                 android:id="@+id/sizeSeek"

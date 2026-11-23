@@ -45,6 +45,7 @@ class DictateAccessibilityService : AccessibilityService() {
     override fun onServiceConnected() {
         super.onServiceConnected()
         instance = this
+        DictationService.onKeyboardChanged(keyboardBounds())
         // Android binds accessibility services at boot, so this is a second
         // chance to bring the button back if "Launch at boot" is on.
         if (Prefs.launchAtBoot(this) && Prefs.buttonEnabled(this) && !DictationService.isRunning) {
@@ -54,6 +55,7 @@ class DictateAccessibilityService : AccessibilityService() {
 
     override fun onUnbind(intent: android.content.Intent?): Boolean {
         instance = null
+        DictationService.onKeyboardChanged(null)
         return super.onUnbind(intent)
     }
 
@@ -62,7 +64,33 @@ class DictateAccessibilityService : AccessibilityService() {
         super.onDestroy()
     }
 
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
+    // ------------------------------------------------- keyboard tracking
+    // The floating button can be shown only while the on-screen keyboard is up
+    // (i.e. you've tapped into a text field). We watch window changes and
+    // report the keyboard's on-screen area to DictationService.
+
+    private val checkKeyboard = Runnable { DictationService.onKeyboardChanged(keyboardBounds()) }
+
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+        when (event?.eventType) {
+            AccessibilityEvent.TYPE_WINDOWS_CHANGED,
+            AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
+            AccessibilityEvent.TYPE_VIEW_FOCUSED -> {
+                main.removeCallbacks(checkKeyboard)
+                main.postDelayed(checkKeyboard, 120)
+            }
+        }
+    }
+
+    /** Screen area of the visible keyboard, or null when no keyboard is showing. */
+    fun keyboardBounds(): android.graphics.Rect? = try {
+        windows.firstOrNull { it.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD }
+            ?.let { w -> android.graphics.Rect().also { w.getBoundsInScreen(it) } }
+            ?.takeIf { !it.isEmpty && it.height() > 0 }
+    } catch (_: Exception) {
+        null
+    }
+
     override fun onInterrupt() {}
 
     private val main = android.os.Handler(android.os.Looper.getMainLooper())

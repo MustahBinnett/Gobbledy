@@ -49,6 +49,8 @@
     <string name="section_button">3. Floating button</string>
     <string name="show_button">Show floating button</string>
     <string name="show_button_help">Hold the button to record, let go to transcribe. Drag it quickly to move it. Colours: teal = ready, red = recording, amber = transcribing, grey = loading or no model.</string>
+    <string name="only_while_typing">Only show while typing</string>
+    <string name="only_while_typing_help">The button appears when the keyboard comes up (when you tap into a text box) and hides when it goes away. If it would be behind the keyboard, it moves up just above it. Turn this off to keep the button on screen all the time. Needs Accessibility turned on.</string>
     <string name="button_size">Button size: %1$d dp</string>
     <string name="launch_at_boot">Launch at boot</string>
     <string name="launch_at_boot_help">Brings the button back after the phone restarts. Android sometimes won\'t allow this straight away; if so, you\'ll get a notification. Tap it to turn the button on.</string>

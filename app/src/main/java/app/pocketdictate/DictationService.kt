@@ -60,6 +60,12 @@ class DictationService : Service(), MicButtonView.Listener {
             c.stopService(Intent(c, DictationService::class.java))
         }
 
+        /** From the accessibility service: keyboard area on screen, or null when hidden. */
+        fun onKeyboardChanged(bounds: android.graphics.Rect?) {
+            val s = instance ?: return
+            s.main.post { s.keyboard = bounds; s.updateVisibility() }
+        }
+
         /** Called after a (re)download so a running service picks up the new file. */
         fun onModelChanged() {
             val s = instance ?: return
@@ -78,8 +84,15 @@ class DictationService : Service(), MicButtonView.Listener {
     private var state = ButtonState.LOADING
     private var started = false
 
+    /** Where you put the button; it is only lifted temporarily above the keyboard. */
+    private var savedX = 0
+    private var savedY = 0
+    private var keyboard: android.graphics.Rect? = null
+    private var dragging = false
+
     private val prefListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         if (key == Prefs.BUTTON_SIZE_DP) applySize()
+        if (key == Prefs.ONLY_WHILE_TYPING) updateVisibility()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -100,6 +113,7 @@ class DictationService : Service(), MicButtonView.Listener {
         instance = this
         Notifications.cancel(this, Notifications.ID_TAP_TO_START)
         wm = getSystemService(WindowManager::class.java)
+        keyboard = DictateAccessibilityService.instance?.keyboardBounds()
         addOverlay()
         Prefs.of(this).registerOnSharedPreferenceChangeListener(prefListener)
         loadModel()
@@ -191,14 +205,42 @@ class DictationService : Service(), MicButtonView.Listener {
         v.contentDescription = getString(R.string.button_description)
         button = v
         clampPosition()
+        savedX = lp.x; savedY = lp.y
         wm.addView(v, lp)
         setState(state)
+        updateVisibility()
     }
 
     private fun applySize() {
-        val b = button ?: return
         val size = dp(Prefs.buttonSizeDp(this))
         lp.width = size; lp.height = size
+        updateVisibility()
+    }
+
+    /**
+     * Shows or hides the button. With "Only show while typing" on, it appears
+     * while the keyboard is up and is lifted above the keyboard if it would be
+     * hidden behind it. It never disappears mid-recording or mid-transcription.
+     * Without Accessibility we can't see the keyboard, so it always shows.
+     */
+    fun updateVisibility() {
+        val b = button ?: return
+        val busy = state == ButtonState.RECORDING || state == ButtonState.TRANSCRIBING || dragging
+        val show = !Prefs.onlyWhileTyping(this) || keyboard != null || busy ||
+            DictateAccessibilityService.instance == null
+        b.visibility = if (show) android.view.View.VISIBLE else android.view.View.GONE
+        lp.flags = if (show) {
+            lp.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv()
+        } else {
+            lp.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        }
+        if (!dragging) {
+            lp.x = savedX; lp.y = savedY
+            val kb = keyboard
+            if (kb != null && lp.y + lp.height > kb.top - dp(8)) {
+                lp.y = kb.top - lp.height - dp(12)
+            }
+        }
         clampPosition()
         runCatching { wm.updateViewLayout(b, lp) }
     }
@@ -211,14 +253,16 @@ class DictationService : Service(), MicButtonView.Listener {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        val b = button ?: return
-        clampPosition()
-        runCatching { wm.updateViewLayout(b, lp) }
+        if (button == null) return
+        updateVisibility()
     }
 
     private fun setState(s: ButtonState) {
+        val wasBusy = state == ButtonState.RECORDING || state == ButtonState.TRANSCRIBING
         state = s
         button?.state = s
+        // A keyboard that closed mid-dictation hides the button once we're done.
+        if (wasBusy && s != ButtonState.RECORDING && s != ButtonState.TRANSCRIBING) updateVisibility()
     }
 
     fun loadModel() {
@@ -309,6 +353,7 @@ class DictationService : Service(), MicButtonView.Listener {
     }
 
     override fun onDragStart() {
+        dragging = true
         recorder?.cancel(); recorder = null
         if (state == ButtonState.RECORDING) setState(ButtonState.READY)
     }
@@ -321,7 +366,10 @@ class DictationService : Service(), MicButtonView.Listener {
     }
 
     override fun onDragEnd() {
+        dragging = false
+        savedX = lp.x; savedY = lp.y
         Prefs.of(this).edit().putInt(Prefs.POS_X, lp.x).putInt(Prefs.POS_Y, lp.y).apply()
+        updateVisibility()
     }
 
     // ------------------------------------------------------------- output
