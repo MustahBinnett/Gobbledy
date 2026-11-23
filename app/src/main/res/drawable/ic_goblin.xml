@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Original goblin artwork for Pocket Dictate. Generated; edit tools/gen_goblin.py rather than by hand. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp" android:height="100dp"
+    android:viewportWidth="100" android:viewportHeight="100">
+    <group>
+        <clip-path android:pathData="M2,50 a48,48 0 1,0 96,0 a48,48 0 1,0 -96,0 Z" />
+        <group android:translateX="-13" android:translateY="-6" android:scaleX="1.22" android:scaleY="1.22">
+            <path android:pathData="M30,46 L4,30 L28,58 Z" android:fillColor="#FFD9B48F" android:strokeColor="#FF2C2C2A" android:strokeWidth="2.4" android:strokeLineJoin="round" />
+            <path android:pathData="M26,47 L12,37 L27,53 Z" android:fillColor="#FFF0997B" />
+            <path android:pathData="M70,46 L96,26 L72,58 Z" android:fillColor="#FFD9B48F" android:strokeColor="#FF2C2C2A" android:strokeWidth="2.4" android:strokeLineJoin="round" />
+            <path android:pathData="M74,47 L88,34 L73,53 Z" android:fillColor="#FFF0997B" />
+            <path android:pathData="M34,30 L36,16 L42,27 L46,12 L50,26 L56,13 L58,27 L65,17 L65,31" android:fillColor="#FF8A7A55" android:strokeColor="#FF2C2C2A" android:strokeWidth="2" android:strokeLineJoin="round" />
+            <path android:pathData="M27,52 a23,25 0 1,0 46,0 a23,25 0 1,0 -46,0 Z" android:fillColor="#FFC9C07A" android:strokeColor="#FF2C2C2A" android:strokeWidth="2.4" />
+            <path android:pathData="M34,40 L46,44 M66,40 L54,44" android:strokeColor="#FF2C2C2A" android:strokeWidth="3" android:strokeLineCap="round" />
+            <path android:pathData="M37,46 q4,3 8,0 M55,46 q4,3 8,0" android:strokeColor="#FF2C2C2A" android:strokeWidth="2.6" android:strokeLineCap="round" />
+            <path android:pathData="M45,52 a5,4 0 1,0 10,0 a5,4 0 1,0 -10,0 Z" android:fillColor="#FFE0937A" android:strokeColor="#FF2C2C2A" android:strokeWidth="1.8" />
+            <path android:pathData="M36,60 q14,-6 28,0 q-2,14 -14,15 q-12,-1 -14,-15 z" android:fillColor="#FF712B13" android:strokeColor="#FF2C2C2A" android:strokeWidth="2.4" android:strokeLineJoin="round" />
+            <path android:pathData="M41,59 l2,5 l2,-6 M55,58 l2,6 l2,-5" android:fillColor="#FFFFFFFF" android:strokeColor="#FFFFFFFF" android:strokeWidth="1.5" android:strokeLineJoin="round" />
+            <path android:pathData="M44,72 l2,-4 l2,4 M52,72 l2,-4 l2,4" android:fillColor="#FFFFFFFF" android:strokeColor="#FFFFFFFF" android:strokeWidth="1.2" />
+            <path android:pathData="M43,69 a7,3 0 1,0 14,0 a7,3 0 1,0 -14,0 Z" android:fillColor="#FFD4537E" />
+        </group>
+    </group>
+    <path android:pathData="M70,5 h18 q6,0 6,6 v8 q0,6 -6,6 h-10 l-7,6 l1.5,-6 h-2.5 q-6,0 -6,-6 v-8 q0,-6 6,-6 z" android:fillColor="#FFFFFFFF" android:strokeColor="#FF2C2C2A" android:strokeWidth="2" android:strokeLineJoin="round" />
+    <path android:pathData="M73,15 v2 M77,12 v8 M81,9 v14 M85,12 v8 M89,15 v2" android:strokeColor="#FF0B6E69" android:strokeWidth="2.6" android:strokeLineCap="round" />
+</vector>

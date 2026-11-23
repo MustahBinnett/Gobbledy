@@ -57,7 +57,8 @@ class MicButtonView(context: Context, private val listener: Listener) : View(con
     private val ring = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE; color = Color.WHITE; strokeCap = Paint.Cap.ROUND
     }
-    private val mic = context.getDrawable(R.drawable.ic_mic)!!.mutate().apply { setTint(Color.WHITE) }
+    /** The goblin artwork; its own circle is r=48 in a 100-unit box. */
+    private val goblin = context.getDrawable(R.drawable.ic_goblin)!!
     private val arcRect = RectF()
     private var phase = 0f
     private val animator = ValueAnimator.ofFloat(0f, 1f).apply {
@@ -94,12 +95,13 @@ class MicButtonView(context: Context, private val listener: Listener) : View(con
         val pulse = if (state == ButtonState.RECORDING) 0.06f * kotlin.math.sin(phase * 2 * Math.PI).toFloat() else 0f
         canvas.drawCircle(w / 2, h / 2, r * (0.94f + pulse), fill)
 
-        val iconSize = (r * 1.0f).toInt()
-        mic.setBounds(
-            (w / 2 - iconSize / 2).toInt(), (h / 2 - iconSize / 2).toInt(),
-            (w / 2 + iconSize / 2).toInt(), (h / 2 + iconSize / 2).toInt()
+        // Size the goblin so its circle matches ours (artwork circle = 96% of its box).
+        val half = r * 0.94f * (100f / 96f)
+        goblin.setBounds(
+            (w / 2 - half).toInt(), (h / 2 - half).toInt(),
+            (w / 2 + half).toInt(), (h / 2 + half).toInt()
         )
-        mic.draw(canvas)
+        goblin.draw(canvas)
 
         if (state == ButtonState.TRANSCRIBING || state == ButtonState.LOADING) {
             ring.strokeWidth = r * 0.10f

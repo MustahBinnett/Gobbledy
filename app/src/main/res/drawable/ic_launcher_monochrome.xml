@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive icon foreground (108dp canvas, artwork kept inside the central 66dp safe zone). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- capsule -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,29a10,10 0,0 1,10 10v14a10,10 0,0 1,-20 0v-14a10,10 0,0 1,10 -10z" />
+    <!-- cradle -->
+    <path
+        android:pathData="M38,51a16,16 0,0 0,32 0"
+        android:strokeWidth="4.5"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+    <!-- stem and base -->
+    <path
+        android:pathData="M54,67v10M45,79h18"
+        android:strokeWidth="4.5"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+    <!-- small sound-wave accent, to make it ours -->
+    <path
+        android:pathData="M74,38a13,13 0,0 1,0 16"
+        android:strokeWidth="3"
+        android:strokeColor="#B3FFFFFF"
+        android:strokeLineCap="round" />
+</vector>
