@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            style="@style/PD.Title"
+            android:text="@string/app_name" />
+
+        <TextView
+            style="@style/PD.Body"
+            android:text="@string/tagline" />
+
+        <!-- ============================ SETUP ============================ -->
+        <TextView style="@style/PD.Section" android:text="@string/section_setup" />
+
+        <LinearLayout style="@style/PD.Card">
+
+            <TextView android:id="@+id/micStatus" style="@style/PD.Status" />
+            <Button android:id="@+id/micButton" style="@style/PD.Button" android:text="@string/allow" />
+
+            <View style="@style/PD.Divider" />
+            <TextView android:id="@+id/notifStatus" style="@style/PD.Status" />
+            <Button android:id="@+id/notifButton" style="@style/PD.Button" android:text="@string/allow" />
+
+            <View style="@style/PD.Divider" />
+            <TextView android:id="@+id/overlayStatus" style="@style/PD.Status" />
+            <Button android:id="@+id/overlayButton" style="@style/PD.Button" android:text="@string/open_overlay_settings" />
+
+            <View style="@style/PD.Divider" />
+            <TextView android:id="@+id/a11yStatus" style="@style/PD.Status" />
+            <TextView style="@style/PD.Body" android:text="@string/a11y_steps" />
+            <Button android:id="@+id/appInfoButton" style="@style/PD.Button" android:text="@string/open_app_info" />
+            <Button android:id="@+id/a11yButton" style="@style/PD.Button" android:text="@string/open_a11y_settings" />
+
+            <View style="@style/PD.Divider" />
+            <TextView style="@style/PD.Status" android:text="@string/battery_title" />
+            <TextView style="@style/PD.Body" android:text="@string/battery_steps" />
+            <Button android:id="@+id/batteryButton" style="@style/PD.Button" android:text="@string/open_battery_settings" />
+        </LinearLayout>
+
+        <!-- ============================ MODEL ============================ -->
+        <TextView style="@style/PD.Section" android:text="@string/section_model" />
+
+        <LinearLayout style="@style/PD.Card">
+            <TextView style="@style/PD.Body" android:id="@+id/modelName" />
+            <TextView android:id="@+id/modelStatus" style="@style/PD.Status" />
+            <ProgressBar
+                android:id="@+id/modelProgress"
+                style="@android:style/Widget.DeviceDefault.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:max="1000"
+                android:visibility="gone" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button android:id="@+id/downloadButton" style="@style/PD.Button"
+                    android:layout_width="0dp" android:layout_weight="1"
+                    android:text="@string/download_model" />
+                <Button android:id="@+id/cancelButton" style="@style/PD.Button"
+                    android:layout_width="0dp" android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/cancel"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ======================== FLOATING BUTTON ======================== -->
+        <TextView style="@style/PD.Section" android:text="@string/section_button" />
+
+        <LinearLayout style="@style/PD.Card">
+            <Switch android:id="@+id/showButtonSwitch" style="@style/PD.Switch" android:text="@string/show_button" />
+            <TextView style="@style/PD.Body" android:text="@string/show_button_help" />
+
+            <View style="@style/PD.Divider" />
+            <TextView android:id="@+id/sizeLabel" style="@style/PD.Status" />
+            <SeekBar
+                android:id="@+id/sizeSeek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <View style="@style/PD.Divider" />
+            <Switch android:id="@+id/bootSwitch" style="@style/PD.Switch" android:text="@string/launch_at_boot" />
+            <TextView style="@style/PD.Body" android:text="@string/launch_at_boot_help" />
+        </LinearLayout>
+
+        <!-- ============================= TEXT ============================= -->
+        <TextView style="@style/PD.Section" android:text="@string/section_text" />
+
+        <LinearLayout style="@style/PD.Card">
+            <Switch android:id="@+id/auSwitch" style="@style/PD.Switch" android:text="@string/au_spelling" />
+            <TextView style="@style/PD.Body" android:text="@string/au_spelling_help" />
+            <Button android:id="@+id/wordListButton" style="@style/PD.Button" android:text="@string/edit_word_list" />
+
+            <View style="@style/PD.Divider" />
+            <Switch android:id="@+id/pasteSwitch" style="@style/PD.Switch" android:text="@string/always_paste" />
+            <TextView style="@style/PD.Body" android:text="@string/always_paste_help" />
+        </LinearLayout>
+
+        <!-- ============================ ABOUT ============================ -->
+        <TextView style="@style/PD.Section" android:text="@string/section_about" />
+        <TextView android:id="@+id/about" style="@style/PD.Body" android:textIsSelectable="true" />
+    </LinearLayout>
+</ScrollView>

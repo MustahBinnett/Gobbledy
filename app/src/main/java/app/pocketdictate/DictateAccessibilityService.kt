@@ -1,0 +1,160 @@
+package app.pocketdictate
+
+import android.accessibilityservice.AccessibilityService
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.ComponentName
+import android.content.Context
+import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
+import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction
+import android.view.accessibility.AccessibilityWindowInfo
+
+/**
+ * Finds the focused text field in whatever app you're using and inserts the
+ * transcript at the cursor, keeping the existing text.
+ *
+ * Method 1 (plain text fields): read the field's text and cursor, splice the
+ * transcript in, write it back with ACTION_SET_TEXT, then put the cursor just
+ * after the new words.
+ * Method 2 (fallback, or when "Always paste" is on): put the transcript on the
+ * clipboard and send ACTION_PASTE, which lets the app insert it itself. This
+ * works better in rich editors such as Google Docs.
+ */
+class DictateAccessibilityService : AccessibilityService() {
+
+    companion object {
+        private const val TAG = "DictateA11y"
+
+        @Volatile
+        var instance: DictateAccessibilityService? = null
+            private set
+
+        fun isEnabled(c: Context): Boolean {
+            val enabled = Settings.Secure.getString(
+                c.contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+            ) ?: return false
+            val me = ComponentName(c, DictateAccessibilityService::class.java)
+            return enabled.split(':').any { ComponentName.unflattenFromString(it) == me }
+        }
+    }
+
+    override fun onServiceConnected() {
+        super.onServiceConnected()
+        instance = this
+        // Android binds accessibility services at boot, so this is a second
+        // chance to bring the button back if "Launch at boot" is on.
+        if (Prefs.launchAtBoot(this) && Prefs.buttonEnabled(this) && !DictationService.isRunning) {
+            if (!DictationService.start(this)) Notifications.postTapToStart(this)
+        }
+    }
+
+    override fun onUnbind(intent: android.content.Intent?): Boolean {
+        instance = null
+        return super.onUnbind(intent)
+    }
+
+    override fun onDestroy() {
+        instance = null
+        super.onDestroy()
+    }
+
+    override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
+    override fun onInterrupt() {}
+
+    /** Returns true if the text went into a field. Must be called on the main thread. */
+    fun insertText(text: String, alwaysPaste: Boolean): Boolean {
+        val node = findFocusedEditable() ?: run {
+            Log.i(TAG, "No focused editable field"); return false
+        }
+        return try {
+            (!alwaysPaste && trySetText(node, text)) || tryPaste(node, text)
+        } catch (e: Exception) {
+            Log.w(TAG, "Insert failed", e); false
+        }
+    }
+
+    private fun findFocusedEditable(): AccessibilityNodeInfo? {
+        // Touching our floating button can make *it* the "active" window, so
+        // look through every window for the one holding input focus.
+        rootInActiveWindow?.findFocus(AccessibilityNodeInfo.FOCUS_INPUT)
+            ?.takeIf { it.isEditable }?.let { return it }
+        val wins = windows.sortedByDescending { it.isFocused }
+        for (w in wins) {
+            if (w.type == AccessibilityWindowInfo.TYPE_ACCESSIBILITY_OVERLAY) continue
+            val focused = w.root?.findFocus(AccessibilityNodeInfo.FOCUS_INPUT) ?: continue
+            if (focused.isEditable) return focused
+        }
+        return null
+    }
+
+    private fun currentText(node: AccessibilityNodeInfo): String? {
+        if (node.isPassword) return null
+        if (node.isShowingHintText) return ""
+        return node.text?.toString() ?: ""
+    }
+
+    private fun trySetText(node: AccessibilityNodeInfo, text: String): Boolean {
+        if (!node.actionList.contains(AccessibilityAction.ACTION_SET_TEXT)) return false
+        val current = currentText(node) ?: return false
+        var start = node.textSelectionStart
+        var end = node.textSelectionEnd
+        if (start < 0 || end < 0) {
+            // Cursor position unknown: only safe if the field is empty.
+            if (current.isNotEmpty()) return false
+            start = 0; end = 0
+        }
+        if (start > end) start = end.also { end = start }
+        if (end > current.length) return false
+
+        val insertion = withSpacing(current, start, end, text)
+        val updated = current.substring(0, start) + insertion + current.substring(end)
+        if (node.maxTextLength in 1 until updated.length) return false
+
+        val args = Bundle().apply {
+            putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, updated)
+        }
+        if (!node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args)) return false
+
+        val cursor = start + insertion.length
+        node.performAction(
+            AccessibilityNodeInfo.ACTION_SET_SELECTION,
+            Bundle().apply {
+                putInt(AccessibilityNodeInfo.ACTION_ARGUMENT_SELECTION_START_INT, cursor)
+                putInt(AccessibilityNodeInfo.ACTION_ARGUMENT_SELECTION_END_INT, cursor)
+            }
+        )
+        // Some apps say "yes" but ignore SET_TEXT. Check the words actually landed.
+        node.refresh()
+        val after = node.text?.toString() ?: return true
+        val landed = after.contains(insertion.trim())
+        if (!landed) Log.i(TAG, "SET_TEXT reported success but text didn't change")
+        return landed
+    }
+
+    private fun tryPaste(node: AccessibilityNodeInfo, text: String): Boolean {
+        val current = currentText(node)
+        val start = node.textSelectionStart
+        val end = node.textSelectionEnd
+        val insertion = if (current != null && start >= 0 && end >= start && end <= current.length) {
+            withSpacing(current, start, end, text)
+        } else text
+        getSystemService(ClipboardManager::class.java)
+            .setPrimaryClip(ClipData.newPlainText("Pocket Dictate", insertion))
+        return node.performAction(AccessibilityNodeInfo.ACTION_PASTE)
+    }
+
+    /** Adds a space before/after the transcript so it doesn't run into neighbouring words. */
+    private fun withSpacing(current: String, start: Int, end: Int, text: String): String {
+        val before = if (start > 0) current[start - 1] else null
+        val after = if (end < current.length) current[end] else null
+        val first = text.first()
+        val needLeading = before != null && !before.isWhitespace() &&
+            first !in ".,;:!?)]}'\"" && before !in "([{"
+        val needTrailing = after != null && !after.isWhitespace() && after !in ".,;:!?)]}'\""
+        return (if (needLeading) " " else "") + text + (if (needTrailing) " " else "")
+    }
+}
