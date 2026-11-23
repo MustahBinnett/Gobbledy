@@ -1,5 +1,14 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
+}
+
+// Permanent release key, kept OUTSIDE the repo (never commit it).
+// Back up this folder: without the key, future versions can't update the installed app.
+val signingProps = Properties().apply {
+    val f = rootProject.file("../PocketDictate-signing/keystore.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
 }
 
 android {
@@ -33,11 +42,22 @@ android {
         }
     }
 
+    signingConfigs {
+        if (signingProps.getProperty("storeFile") != null) {
+            create("release") {
+                storeFile = file(signingProps.getProperty("storeFile"))
+                storePassword = signingProps.getProperty("storePassword")
+                keyAlias = signingProps.getProperty("keyAlias")
+                keyPassword = signingProps.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
-            // Signed with the local debug key so it can be sideloaded directly.
-            signingConfig = signingConfigs.getByName("debug")
+            // Use the permanent key when it's present; fall back to the debug key otherwise.
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
         }
     }
 
