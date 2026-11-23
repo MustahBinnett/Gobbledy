@@ -1,4 +1,4 @@
-# Pocket Dictate: US > Australian spelling list
+# Gobbledy: US > Australian spelling list
 #
 # One rule per line:   US word > Australian word
 # A line starting with ! keeps that exact word (capitals matter) unchanged.

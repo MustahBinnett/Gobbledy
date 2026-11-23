@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Original goblin artwork for Pocket Dictate. Generated; edit tools/gen_goblin.py rather than by hand. -->
+<!-- Original goblin artwork for Gobbledy. Generated; edit tools/gen_goblin.py rather than by hand. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="100dp" android:height="100dp"
     android:viewportWidth="100" android:viewportHeight="100">

@@ -186,7 +186,7 @@ class DictateAccessibilityService : AccessibilityService() {
             withSpacing(current, start, end, text)
         } else text
         getSystemService(ClipboardManager::class.java)
-            .setPrimaryClip(ClipData.newPlainText("Pocket Dictate", insertion))
+            .setPrimaryClip(ClipData.newPlainText("Gobbledy", insertion))
         return node.performAction(AccessibilityNodeInfo.ACTION_PASTE)
     }
 

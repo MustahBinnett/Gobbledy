@@ -397,7 +397,7 @@ class DictationService : Service(), MicButtonView.Listener {
     }
 
     private fun copyToClipboard(text: String) {
-        val clip = ClipData.newPlainText("Pocket Dictate", text)
+        val clip = ClipData.newPlainText("Gobbledy", text)
         if (Build.VERSION.SDK_INT >= 33) {
             clip.description.extras = PersistableBundle().apply {
                 putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, false)

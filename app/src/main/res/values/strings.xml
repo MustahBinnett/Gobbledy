@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Pocket Dictate</string>
+    <string name="app_name">Gobbledy</string>
     <string name="tagline">Hold the floating button, speak, let go. Your words are transcribed on the phone, offline, and typed into whatever text box you\'re using.</string>
 
     <!-- Setup -->
@@ -15,9 +15,9 @@
     <string name="open_overlay_settings">Open “Display over other apps”</string>
     <string name="open_a11y_settings">Open Accessibility settings</string>
     <string name="open_app_info">Open App info (for “Allow restricted settings”)</string>
-    <string name="a11y_steps">Pocket Dictate uses Accessibility only to type your words into the box you\'re in. Because it was installed from outside the Galaxy Store, Samsung blocks this at first.\n\n1. Tap “Open Accessibility settings”, then Installed apps > Pocket Dictate, and try to turn it on. You\'ll see “Restricted setting”. Tap OK.\n2. Come back here and tap “Open App info”.\n3. Tap the three dots (⋮) at the top right, then “Allow restricted settings”. Confirm with your fingerprint or PIN.\n4. Tap “Open Accessibility settings” again: Installed apps > Pocket Dictate > turn it on > Allow.</string>
+    <string name="a11y_steps">Gobbledy uses Accessibility only to type your words into the box you\'re in. Because it was installed from outside the Galaxy Store, Samsung blocks this at first.\n\n1. Tap “Open Accessibility settings”, then Installed apps > Gobbledy, and try to turn it on. You\'ll see “Restricted setting”. Tap OK.\n2. Come back here and tap “Open App info”.\n3. Tap the three dots (⋮) at the top right, then “Allow restricted settings”. Confirm with your fingerprint or PIN.\n4. Tap “Open Accessibility settings” again: Installed apps > Gobbledy > turn it on > Allow.</string>
     <string name="battery_title">Battery: stop Samsung putting it to sleep</string>
-    <string name="battery_steps">So the button doesn\'t disappear after a while:\n\n1. Tap “Open Battery settings” (or go to Settings > Battery).\n2. Tap “Background usage limits”.\n3. Tap “Never sleeping apps”.\n4. Tap the + (Add apps) at the top right, tick Pocket Dictate, then tap Add.\n\nIf the button opens the wrong page, go to Settings > Battery yourself.</string>
+    <string name="battery_steps">So the button doesn\'t disappear after a while:\n\n1. Tap “Open Battery settings” (or go to Settings > Battery).\n2. Tap “Background usage limits”.\n3. Tap “Never sleeping apps”.\n4. Tap the + (Add apps) at the top right, tick Gobbledy, then tap Add.\n\nIf the button opens the wrong page, go to Settings > Battery yourself.</string>
     <string name="open_battery_settings">Open Battery settings</string>
 
     <!-- Model -->
@@ -73,7 +73,7 @@
 
     <!-- About -->
     <string name="section_about">About</string>
-    <string name="about_text">Pocket Dictate %1$s\nSpeech engine: transcribe.cpp %2$s (MIT licence), CPU backend.\nModel: NVIDIA Parakeet Unified EN 0.6B, GGUF Q8_0 conversion by handy-computer (NVIDIA Open Model Licence).\nInspired by Handy, the open-source desktop app. Not affiliated with it.\n\nNo accounts, no analytics, no cloud. The internet is used only to download the model.</string>
+    <string name="about_text">Gobbledy %1$s\nSpeech engine: transcribe.cpp %2$s (MIT licence), CPU backend.\nModel: NVIDIA Parakeet Unified EN 0.6B, GGUF Q8_0 conversion by handy-computer (NVIDIA Open Model Licence).\nInspired by Handy, the open-source desktop app. Not affiliated with it.\n\nNo accounts, no analytics, no cloud. The internet is used only to download the model.</string>
 
     <string name="licences_title">Open-source licences</string>
 
@@ -81,23 +81,23 @@
     <string name="channel_button">Floating button</string>
     <string name="channel_download">Model download</string>
     <string name="channel_alerts">Alerts</string>
-    <string name="notification_title">Pocket Dictate is ready</string>
+    <string name="notification_title">Gobbledy is ready</string>
     <string name="notification_text">Hold the floating button to dictate.</string>
     <string name="notification_stop">Turn off</string>
-    <string name="tap_to_start_title">Tap to turn on Pocket Dictate</string>
+    <string name="tap_to_start_title">Tap to turn on Gobbledy</string>
     <string name="tap_to_start_text">Android needs you to start the floating button yourself this time.</string>
-    <string name="button_description">Pocket Dictate. Hold to dictate.</string>
+    <string name="button_description">Gobbledy. Hold to dictate.</string>
 
     <!-- Accessibility service -->
-    <string name="accessibility_label">Pocket Dictate</string>
-    <string name="accessibility_description">Types the words you dictate with Pocket Dictate into the text box you\'re using. It only looks for the focused text box when you finish dictating. Nothing is collected or sent anywhere.</string>
+    <string name="accessibility_label">Gobbledy</string>
+    <string name="accessibility_description">Types the words you dictate with Gobbledy into the text box you\'re using. It only looks for the focused text box when you finish dictating. Nothing is collected or sent anywhere.</string>
 
     <!-- Toasts -->
-    <string name="toast_need_mic">Pocket Dictate needs microphone permission. Open the app and tap Allow.</string>
+    <string name="toast_need_mic">Gobbledy needs microphone permission. Open the app and tap Allow.</string>
     <string name="toast_mic_settings">Microphone access is turned off. Turn it on under Permissions > Microphone.</string>
-    <string name="toast_need_overlay">Pocket Dictate needs “Display over other apps” turned on.</string>
+    <string name="toast_need_overlay">Gobbledy needs “Display over other apps” turned on.</string>
     <string name="toast_start_failed">Android didn\'t let the button start. Please try again.</string>
-    <string name="toast_no_model">The speech model isn\'t downloaded yet. Open Pocket Dictate to download it.</string>
+    <string name="toast_no_model">The speech model isn\'t downloaded yet. Open Gobbledy to download it.</string>
     <string name="toast_loading">Still loading the speech model…</string>
     <string name="toast_busy">Still working on the last one…</string>
     <string name="toast_retry_load">Trying to load the speech model again…</string>

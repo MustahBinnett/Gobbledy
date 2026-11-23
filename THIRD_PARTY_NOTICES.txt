@@ -1,7 +1,7 @@
-Pocket Dictate - third-party notices
+Gobbledy - third-party notices
 ====================================
 
-Pocket Dictate includes the open-source software listed below. Each
+Gobbledy includes the open-source software listed below. Each
 component's copyright notice and licence text is reproduced in full,
 as its licence requires.
 
@@ -10,7 +10,7 @@ handy-computer) is NOT included in the app. It is downloaded on first run
 from Hugging Face and is licensed under the NVIDIA Open Model License:
 https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/
 
-Pocket Dictate is inspired by Handy (https://github.com/cjpais/Handy) and
+Gobbledy is inspired by Handy (https://github.com/cjpais/Handy) and
 is not affiliated with it.
 
 

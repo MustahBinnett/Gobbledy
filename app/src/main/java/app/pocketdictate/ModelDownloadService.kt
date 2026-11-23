@@ -85,7 +85,7 @@ class ModelDownloadService : Service() {
 
     private fun runDownload() {
         val wakeLock = getSystemService(PowerManager::class.java)
-            .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "PocketDictate:download")
+            .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Gobbledy:download")
         wakeLock.acquire(3 * 60 * 60 * 1000L)
         try {
             if (ModelFiles.isReady(this)) {
@@ -139,7 +139,7 @@ class ModelDownloadService : Service() {
             connectTimeout = 20_000
             readTimeout = 30_000
             instanceFollowRedirects = true
-            setRequestProperty("User-Agent", "PocketDictate/${BuildConfig.VERSION_NAME} (Android)")
+            setRequestProperty("User-Agent", "Gobbledy/${BuildConfig.VERSION_NAME} (Android)")
             if (have > 0) setRequestProperty("Range", "bytes=$have-")
         }
         connection = conn

@@ -46,7 +46,7 @@ def body(indent="        "):
     out += [f"{indent}{x}" for x in bubble]
     return "\n".join(out)
 
-HDR = '<?xml version="1.0" encoding="utf-8"?>\n<!-- Original goblin artwork for Pocket Dictate. Generated; edit tools/gen_goblin.py rather than by hand. -->\n'
+HDR = '<?xml version="1.0" encoding="utf-8"?>\n<!-- Original goblin artwork for Gobbledy. Generated; edit tools/gen_goblin.py rather than by hand. -->\n'
 res = sys.argv[1]
 
 with open(os.path.join(res, "drawable", "ic_goblin.xml"), "w", encoding="utf-8", newline="\n") as f:
