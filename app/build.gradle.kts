@@ -20,8 +20,8 @@ android {
         applicationId = "app.pocketdictate"
         minSdk = 29
         targetSdk = 37
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
 
         ndk {
             // Galaxy S25 Ultra (and every current phone) is 64-bit ARM.

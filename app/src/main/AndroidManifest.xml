@@ -40,6 +40,11 @@
             android:label="@string/word_list_title"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".LicencesActivity"
+            android:exported="false"
+            android:label="@string/licences_title" />
+
         <service
             android:name=".DictationService"
             android:exported="false"

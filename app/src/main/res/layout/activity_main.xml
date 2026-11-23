@@ -112,5 +112,6 @@
         <!-- ============================ ABOUT ============================ -->
         <TextView style="@style/PD.Section" android:text="@string/section_about" />
         <TextView android:id="@+id/about" style="@style/PD.Body" android:textIsSelectable="true" />
+        <Button android:id="@+id/licencesButton" style="@style/PD.Button" android:text="@string/licences_title" />
     </LinearLayout>
 </ScrollView>

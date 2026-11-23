@@ -117,6 +117,10 @@ class MainActivity : Activity() {
         findViewById<TextView>(R.id.about).text =
             getString(R.string.about_text, BuildConfig.VERSION_NAME, engineVersion)
 
+        findViewById<Button>(R.id.licencesButton).setOnClickListener {
+            startActivity(Intent(this, LicencesActivity::class.java))
+        }
+
         handleStartExtra(intent)
     }
 

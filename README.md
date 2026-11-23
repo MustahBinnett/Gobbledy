@@ -36,5 +36,5 @@ Needs JDK 17+, Android SDK Platform 37, NDK 30.0.16248370 and CMake 3.31.6. tran
 ## Licences
 
 - Pocket Dictate: [MIT](LICENSE)
-- transcribe.cpp: MIT
+- Bundled open-source code (transcribe.cpp, ggml, llamafile sgemm, miniz, Kotlin standard library, libc++): full notices in [THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt), also shown in the app under About > Open-source licences
 - Parakeet Unified EN 0.6B (downloaded at first run, not included): [NVIDIA Open Model License](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/), GGUF conversion by handy-computer
